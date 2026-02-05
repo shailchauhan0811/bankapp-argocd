@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bankapp
+  namespace: webapps
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: bankapp
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: bankapp
+    spec:
+      containers:
+      - image: shailchauhan/bankapp:latest
+        name: bankapp
+        ports:
+        - containerPort: 8080
+        env:
+          - name: SPRING_DATASOURCE_URL
+            value: jdbc:mysql://mysql-service:3306/bankapp?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+          - name: SPRING_DATASOURCE_USERNAME
+            value: root
+          - name: SPRING_DATASOURCE_PASSWORD
+            value: redhat@123
+        resources: 
+          requests:
+            memory: "512Mi"
+            cpu: "500m"
+          limits:
+            memory: "1Gi"
+            cpu: "1000m"
